@@ -1,0 +1,4 @@
+dataset = endpoints 
+| filter endpoint_status in (ENUM.CONNECTED , ENUM.DISCONNECTED ) and operational_status != ENUM.PROTECTED 
+| fields endpoint_name , endpoint_status , operational_status , kernel_version , linux_operation_mode , operational_status_description 
+| alter osd = arraystring(arraymap(json_extract_array(to_json_string(operational_status_description ), "$,"), json_extract_scalar("element", "$.reason")), ",")
